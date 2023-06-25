@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "cStandard": "c11",
+            "compilerPath": "/usr/local/bin/arm-none-eabi-g++",
+            "cppStandard": "c++17",
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "includePath": [
+                "${workspaceFolder}/kxmx_bluemchen/**",
+                "${workspaceFolder}/kxmx_bluemchen/libDaisy/**",
+                "${workspaceFolder}/kxmx_bluemchen/DaisySP/**"
+            ],
+            "name": "macOS",
+            "configurationProvider": "ms-vscode.makefile-tools"
+        }
+    ],
+    "version": 4
+}
