@@ -1,5 +1,5 @@
-# Project Name
-TARGET ?= blink
+# Set the project name to your current working project.
+TARGET ?= drone
 
 DEBUG = 1
 OPT = -O0

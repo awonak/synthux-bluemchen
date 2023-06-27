@@ -24,3 +24,11 @@ Use the default build task (`build_and_flash`) to compile the current file and f
 ```plaintext
 Ctrl + Shift + B
 ```
+
+## Workshops
+
+### [Drone](apps/drone/)
+
+* [Workshop](https://www.synthux.academy/workshop/build-a-multi-voice-drone-synth)
+* [Source Code](https://github.com/Synthux-Academy/simple-examples/tree/main/daisyduino/simple-multivoice-drone)
+* [YouTube Video](https://www.youtube.com/live/OupvaCWw7is?feature=share)
