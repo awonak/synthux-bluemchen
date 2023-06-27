@@ -2,7 +2,7 @@
     "configurations": [
         {
             "cStandard": "c11",
-            "compilerPath": "/usr/local/bin/arm-none-eabi-g++",
+            "compilerPath": "/usr/bin/arm-none-eabi-g++",
             "cppStandard": "c++17",
             "defines": [
                 "_DEBUG",
@@ -14,7 +14,7 @@
                 "${workspaceFolder}/kxmx_bluemchen/libDaisy/**",
                 "${workspaceFolder}/kxmx_bluemchen/DaisySP/**"
             ],
-            "name": "macOS",
+            "name": "linux",
             "configurationProvider": "ms-vscode.makefile-tools"
         }
     ],
