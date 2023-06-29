@@ -29,15 +29,15 @@ class Vox {
      * @param freq Float between 0 and 1.0.
      */
     void Update(float pitch, float freq) {
-        auto oscFreqOffset = fmap(pitch, 0, 500);
+        auto oscFreqOffset = daisysp::fmap(pitch, 0, 500);
         auto oscFreqMin = kOscLowestFreq + oscFreqOffset;
         auto oscFreqMax = _oscHighestFreq + oscFreqOffset;
-        _oscFreq = fmap(freq, oscFreqMin, oscFreqMax);
-        auto lfoAmp = fmap(freq, 0.f, 0.005);
-        _lfo.SetAmp(lfoAmp);
+        _oscFreq = daisysp::fmap(freq, oscFreqMin, oscFreqMax, daisysp::Mapping::EXP);
+        _lfoAmp = daisysp::fmap(freq, 0.f, 0.005);
     }
 
     float Process() {
+        _lfo.SetAmp(_lfoAmp);
         _osc.SetFreq(_oscFreq * (1.f + _lfo.Process()));
         return _osc.Process();
     }
@@ -47,6 +47,7 @@ class Vox {
     Oscillator _lfo;
     float _oscFreq;
     float _oscHighestFreq;
+    float _lfoAmp;
 
     // Returns a random float between 5.0 and 15.0.
     float randLFOFreq() {

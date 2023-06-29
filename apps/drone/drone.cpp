@@ -12,9 +12,7 @@ using namespace daisysp;
 Bluemchen bluemchen;
 
 Parameter knob1;
-Parameter knob1_dac;
 Parameter knob2;
-Parameter knob2_dac;
 Parameter cv1;
 Parameter cv2;
 
@@ -23,15 +21,12 @@ const float kVoxVolumeKof = 3.0 / kVoxCount;
 Vox voxs[kVoxCount];
 Filter flt;
 
-void UpdateControls() {
-    bluemchen.ProcessAllControls();
+uint32_t last_ui_update = 0;
+uint32_t refresh_ms = 100;
 
+void UpdateControls() {
     knob1.Process();
     knob2.Process();
-
-    bluemchen.seed.dac.WriteValue(daisy::DacHandle::Channel::ONE, static_cast<uint16_t>(knob1_dac.Process()));
-    bluemchen.seed.dac.WriteValue(daisy::DacHandle::Channel::TWO, static_cast<uint16_t>(knob2_dac.Process()));
-
     cv1.Process();
     cv2.Process();
 
@@ -45,6 +40,13 @@ void UpdateControls() {
 }
 
 void UpdateOled() {
+    // limit update rate
+    uint32_t now = bluemchen.seed.system.GetNow();
+    if (now - last_ui_update < refresh_ms) {
+        return;
+    }
+    last_ui_update = now;
+
     bluemchen.display.Fill(false);
     std::string str = "";
     char* cstr = &str[0];
@@ -86,10 +88,16 @@ void UpdateOled() {
 
 void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, size_t size) {
     for (size_t i = 0; i < size; i++) {
-        float output = 0;
-        for (auto& vox : voxs) output += vox.Process();
-        output = flt.Process(output) * kVoxVolumeKof;
-        out[0][i] = out[1][i] = output;
+        float outputL, outputR = 0;
+        for (int j = 0; j < kVoxCount; j++) {
+            (i % 2)
+                ? outputL += voxs[j].Process()
+                : outputR += voxs[j].Process();
+        }
+        outputL = flt.Process(outputL) * kVoxVolumeKof;
+        outputR = flt.Process(outputR) * kVoxVolumeKof;
+        out[0][i] = outputL;
+        out[1][i] = outputR;
     }
 }
 
@@ -99,9 +107,6 @@ int main(void) {
 
     knob1.Init(bluemchen.controls[bluemchen.CTRL_1], 0.0f, 1.0f, Parameter::LINEAR);
     knob2.Init(bluemchen.controls[bluemchen.CTRL_2], 0.0f, 1.0f, Parameter::LINEAR);
-
-    knob1_dac.Init(bluemchen.controls[bluemchen.CTRL_1], 0.0f, 1.0f, Parameter::LINEAR);
-    knob2_dac.Init(bluemchen.controls[bluemchen.CTRL_2], 0.0f, 1.0f, Parameter::LINEAR);
 
     cv1.Init(bluemchen.controls[bluemchen.CTRL_3], 0.0f, 1.0f, Parameter::LINEAR);
     cv2.Init(bluemchen.controls[bluemchen.CTRL_4], 0.0f, 1.0f, Parameter::LINEAR);
@@ -125,6 +130,5 @@ int main(void) {
     while (1) {
         UpdateControls();
         UpdateOled();
-        System::Delay(4);
     }
 }
