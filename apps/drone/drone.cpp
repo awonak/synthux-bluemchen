@@ -1,6 +1,6 @@
 #include <string>
 
-#include "../../kxmx_bluemchen/src/kxmx_bluemchen.h"
+#include "kxmx_bluemchen.h"
 #include "daisysp.h"
 #include "flt.h"
 #include "vox.h"
@@ -21,8 +21,8 @@ const float kVoxVolumeKof = 3.0 / kVoxCount;
 Vox voxs[kVoxCount];
 Filter flt;
 
+const int refresh_ms = 100;
 uint32_t last_ui_update = 0;
-uint32_t refresh_ms = 100;
 
 void UpdateControls() {
     knob1.Process();

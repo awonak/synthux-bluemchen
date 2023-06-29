@@ -6,6 +6,7 @@ OPT = -O0
 
 # Sources
 CPP_SOURCES = kxmx_bluemchen/src/kxmx_bluemchen.cpp apps/${TARGET}/${TARGET}.cpp
+C_INCLUDES = -Ikxmx_bluemchen/src
 
 USE_FATFS = 1
 
