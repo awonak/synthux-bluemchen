@@ -16,7 +16,7 @@ Parameter knob2;
 Parameter cv1;
 Parameter cv2;
 
-const int kVoxCount = 15;
+const int kVoxCount = 16;
 const float kVoxVolumeKof = 3.0 / kVoxCount;
 Vox voxs[kVoxCount];
 Filter flt;
@@ -90,7 +90,7 @@ void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, s
     for (size_t i = 0; i < size; i++) {
         float outputL, outputR = 0;
         for (int j = 0; j < kVoxCount; j++) {
-            (i % 2)
+            (j % 2)
                 ? outputL += voxs[j].Process()
                 : outputR += voxs[j].Process();
         }
