@@ -45,6 +45,10 @@ class Looper {
         _is_loop_set = true;
     }
 
+    size_t LoopLength() {
+        return _loop_length;
+    }
+
     float Process(float in) {
         // Calculate iterator position on the record level ramp.
         if ((_rec_env_pos_inc > 0 && _rec_env_pos < kFadeLength) || (_rec_env_pos_inc < 0 && _rec_env_pos > 0)) {
