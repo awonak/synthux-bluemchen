@@ -32,3 +32,9 @@ Ctrl + Shift + B
 * [Workshop](https://www.synthux.academy/workshop/build-a-multi-voice-drone-synth)
 * [Source Code](https://github.com/Synthux-Academy/simple-examples/tree/main/daisyduino/simple-multivoice-drone)
 * [YouTube Video](https://www.youtube.com/live/OupvaCWw7is?feature=share)
+
+### [Sampler/Looper](apps/looper/)
+
+* [Workshop](https://www.synthux.academy/workshop/build-your-own-sampler-looper)
+* [Source Code](https://github.com/Synthux-Academy/simple-examples/tree/main/daisyduino/simple-looper)
+* [YouTube Video](https://www.youtube.com/live/X3hh8FNe_GE)
