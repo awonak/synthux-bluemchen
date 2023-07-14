@@ -30,11 +30,23 @@ const int refresh_ms = 100;
 uint32_t last_ui_update = 0;
 
 
-void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, size_t size) {
-    for (size_t i = 0; i < size; i++) {
-        float looper_out = looper.Process(in[1][i]);
-        out[0][i] = out[1][i] = pitch_shifter.Process(looper_out);
-    }
+void UpdateControls() {
+    bluemchen.encoder.Debounce();
+    loop_length.Process();
+    loop_start.Process();
+
+    // Set loop parameters
+    looper.SetLoop(loop_start.Value(), loop_length.Value());
+
+    // Toggle record
+    looper.SetRecording(bluemchen.encoder.RisingEdge());
+
+    // Set pitch - clamp value within a ±12 semitone range.
+    pitch_val += bluemchen.encoder.Increment();
+    // pitch_val = std::clamp(pitch_val + read, -12, 12);  // # CPP_STANDARD = -std=c++17
+    pitch_val = (pitch_val < -12) ? -12 : pitch_val;
+    pitch_val = (pitch_val > 12) ? 12 : pitch_val;
+    pitch_shifter.SetTransposition((float)pitch_val / (float)12);
 }
 
 void UpdateOled() {
@@ -74,14 +86,24 @@ void UpdateOled() {
     bluemchen.display.WriteString(cstr, Font_6x8, true);
 
     str = " len:";
-    bluemchen.display.SetCursor(0, 26);
+    bluemchen.display.SetCursor(0, 24);
     bluemchen.display.WriteString(cstr, Font_6x8, true);
 
     str = std::to_string(static_cast<int>(looper.LoopLength()));
-    bluemchen.display.SetCursor(26, 26);
+    bluemchen.display.SetCursor(26, 24);
     bluemchen.display.WriteString(cstr, Font_6x8, true);
 
     bluemchen.display.Update();
+}
+
+void AudioCallback(AudioHandle::InputBuffer in, AudioHandle::OutputBuffer out, size_t size) {
+    UpdateControls();
+    UpdateOled();
+
+    for (size_t i = 0; i < size; i++) {
+        float looper_out = looper.Process(in[0][i]);
+        out[0][i] = out[1][i] = pitch_shifter.Process(looper_out);
+    }
 }
 
 int main(void) {
@@ -102,20 +124,5 @@ int main(void) {
 
     bluemchen.StartAudio(AudioCallback);
 
-    for (;;) {
-        bluemchen.ProcessAllControls();
-
-        // Set loop parameters
-        looper.SetLoop(loop_start.Value(), loop_length.Value());
-
-        // Toggle record
-        looper.SetRecording(bluemchen.encoder.RisingEdge());
-
-        // Set pitch - clamp value within a ±12 semitone range.
-        int8_t read = bluemchen.encoder.Increment();
-        pitch_val = std::clamp(pitch_val + read, -12, 12);
-        pitch_shifter.SetTransposition((float)pitch_val / (float)12);
-
-        UpdateOled();
-    }
+    for (;;) {}
 }

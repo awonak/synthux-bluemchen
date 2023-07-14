@@ -94,7 +94,7 @@ class Looper {
 
    private:
     static const size_t kFadeLength = 600;
-    static const size_t kMinLoopLength = 2 * kFadeLength;
+    const size_t kMinLoopLength = 2 * kFadeLength;
 
     float* _buffer;
 

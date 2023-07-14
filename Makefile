@@ -4,7 +4,7 @@ TARGET ?= looper
 DEBUG = 1
 OPT = -O0
 
-CPP_STANDARD = -std=c++17
+# CPP_STANDARD = -std=c++17
 
 # Sources
 CPP_SOURCES = kxmx_bluemchen/src/kxmx_bluemchen.cpp apps/${TARGET}/${TARGET}.cpp
