@@ -1,5 +1,5 @@
 # Set the project name to your current working project.
-TARGET ?= drone
+TARGET ?= MiniVerb
 
 DEBUG = 1
 OPT = -O0
